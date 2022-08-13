@@ -1,0 +1,42 @@
+[package]
+name = "pixel3d"
+version = "0.1.0"
+publish = false
+authors = ["Nick Kaluhin <smallnibbler@gmail.com>"]
+edition = "2021"
+exclude = ["dist", "build", "assets", "credits"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[workspace]
+resolver = "2" # Important! wgpu/Bevy needs this!
+
+# Enable a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+lto = true
+codegen-units = 1
+
+[features]
+dev = [
+    "bevy/dynamic",
+]
+
+[dependencies]
+bevy = { version = "0.8", default-features = false, features = ["bevy_asset", "bevy_winit", "render", "png", "x11"] }
+bevy_kira_audio = { version = "0.11" }
+bevy_asset_loader = { version = "0.12" }
+rand = { version = "0.8.3" }
+
+# keep the following in sync with Bevy's dependencies
+winit = { version = "0.26.0", default-features = false }
+image = { version = "0.24", default-features = false }
+
+[build-dependencies]
+embed-resource = "1.4"
